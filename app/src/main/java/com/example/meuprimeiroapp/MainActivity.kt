@@ -1,5 +1,7 @@
 package com.example.meuprimeiroapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
@@ -17,16 +19,26 @@ import androidx.core.view.WindowInsetsCompat
 import java.util.Random
 
 class MainActivity() : AppCompatActivity() {
-
+    private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         val editText: EditText = findViewById(R.id.text_input)
         val textResult: TextView = findViewById(R.id.text_result)
         val btnGenerate: Button = findViewById(R.id.button)
+
+        prefs = getSharedPreferences("db", Context.MODE_PRIVATE)
+        val result = prefs.getString("result", null)
+
+        result?.let {
+            textResult.text = "Ultima aposta:  $it"      /* 1 forma if != null */
+        }
+        /*if (result != null) {
+            textResult.text = "Ultima aposta: $result"   2º forma != null
+        }*/
+
 
         btnGenerate.setOnClickListener {
 
@@ -62,6 +74,15 @@ class MainActivity() : AppCompatActivity() {
         }
 
         textResult.text = numbers.joinToString(" - ")
+
+        /*val editor = prefs.edit()
+        editor.putString("result", textResult.text.toString())      /// primeira forma de fazer
+        editor.apply()*/
+
+        prefs.edit().apply() {
+            putString("result", textResult.text.toString())     /* segunda forma */
+            apply()
+        }
 
     }
 }
