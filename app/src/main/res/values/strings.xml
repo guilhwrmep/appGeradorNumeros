@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Meu Primeiro App</string>
+    <string name="number_hint">Digite um número entre 5 a 15</string>
+</resources>
